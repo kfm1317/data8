@@ -222,7 +222,7 @@ grader.check("q1_6")
 # manual: true
 # -->
 
-# In[12]:
+# In[11]:
 
 
 def one_simulated_statistic():
@@ -239,7 +239,7 @@ for i in np.arange(num_simulations):
     simulated_statistics = np.append(simulated_statistics, one_simulated_statistic())
 
 
-# In[13]:
+# In[12]:
 
 
 # Run this cell to produce a histogram of the simulated statistics
@@ -260,14 +260,14 @@ plt.scatter(observed_statistic, -0.002, color='red', s=40);
 #  - 4
 # -->
 
-# In[77]:
+# In[13]:
 
 
 p_value = np.count_nonzero(simulated_statistics >= observed_statistic)/num_simulations
 p_value
 
 
-# In[31]:
+# In[14]:
 
 
 grader.check("q1_8")
@@ -293,14 +293,14 @@ grader.check("q1_8")
 #  - 4
 # -->
 
-# In[16]:
+# In[15]:
 
 
 correct_doctor = 2
 correct_doctor
 
 
-# In[17]:
+# In[16]:
 
 
 grader.check("q1_9")
@@ -318,7 +318,7 @@ grader.check("q1_9")
 # 
 # We will be working with data from the [Gallup World Poll](https://www.gallup.com/analytics/349487/gallup-global-happiness-center.aspx#:~:text=World%20Happiness%20Report&text=Using%20the%20Gallup%20World%20Poll,about%20the%20World%20Happiness%20Report.) that is presented in the World Happiness Report, a survey of the state of global happiness. The survey ranked 155 countries by overall happiness and estimated the influence that economic production, social support, life expectancy, freedom, absence of corruption, and generosity had on population happiness. The study has been repeated for several years - we'll be looking at data from the 2016 survey. **Run the cell below to load in the `happiness_scores` table.**
 
-# In[18]:
+# In[17]:
 
 
 happiness_scores = Table.read_table("happiness_scores.csv")
@@ -331,7 +331,7 @@ happiness_scores.show(5)
 # 
 # Let's look at the different factors that affect happiness in the United States. Run the cell below to view the row in `us_happiness` that contains data for the United States.
 
-# In[19]:
+# In[18]:
 
 
 us_happiness = happiness_scores.where("Country", "United States")
@@ -343,7 +343,7 @@ us_happiness
 # 
 # *Note:* The factors shown in `us_happiness` don't add up exactly to the happiness score, so we adjusted the proportions to  only account for the data we have access to. The proportions were found by dividing each Happiness Factor value by the sum of all Happiness Factor values in `us_happiness`.
 
-# In[20]:
+# In[19]:
 
 
 us_happiness_factors = Table().read_table("us_happiness_factors.csv")
@@ -382,7 +382,7 @@ us_happiness_factors
 #  - 2
 # -->
 
-# In[23]:
+# In[20]:
 
 
 null_distribution = np.ones(6) * 1/6
@@ -396,7 +396,7 @@ observed_tvd = calculate_tvd(us_happiness_factors.column(1), null_distribution)
 observed_tvd
 
 
-# In[24]:
+# In[21]:
 
 
 grader.check("q2_2")
@@ -417,7 +417,7 @@ grader.check("q2_2")
 #  - 1
 # -->
 
-# In[25]:
+# In[22]:
 
 
 simulated_tvds = make_array()
@@ -429,7 +429,7 @@ for i in np.arange(10000):
 simulated_tvds
 
 
-# In[26]:
+# In[23]:
 
 
 grader.check("q2_3")
@@ -437,7 +437,7 @@ grader.check("q2_3")
 
 # Run the cell below to plot a histogram of your simulated test statistics, as well as the observed value of the test statistic.
 
-# In[27]:
+# In[24]:
 
 
 Table().with_column("Simulated TVDs", simulated_tvds).hist()
@@ -455,14 +455,14 @@ plt.show();
 #  - 4
 # -->
 
-# In[29]:
+# In[25]:
 
 
-p_value_tvd = np.count_nonzero(observed_tvd <= simulated_tvds)/10000
+p_value_tvd = np.count_nonzero(simulated_tvds >= observed_tvd)/10000
 p_value_tvd
 
 
-# In[32]:
+# In[26]:
 
 
 grader.check("q2_4")
@@ -486,7 +486,7 @@ grader.check("q2_4")
 # 
 # Data scientists have drawn a simple random sample of size 500 from a large population of adults. Each member of the population happened to identify as either "male" or "female". Data was collected on several attributes of the sampled people, including age. The table `sampled_ages` contains one row for each person in the sample, with columns containing the individual's gender identity.
 
-# In[33]:
+# In[27]:
 
 
 sampled_ages = Table.read_table('age.csv')
@@ -504,14 +504,14 @@ sampled_ages.show(5)
 #  - 4
 # -->
 
-# In[34]:
+# In[28]:
 
 
 num_females = sampled_ages.group("Gender").sort("Gender").column("count").item(0)
 num_females
 
 
-# In[35]:
+# In[29]:
 
 
 grader.check("q3_1")
@@ -528,16 +528,16 @@ grader.check("q3_1")
 #  - 4
 # -->
 
-# In[37]:
+# In[30]:
 
 
 group_mean_tbl = sampled_ages.group("Gender", np.average).sort("Gender")
 group_means = group_mean_tbl.column(1)       # array of mean ages
-avg_male_vs_female = group_means.item(0) < group_means.item(1)
+avg_male_vs_female = group_means.item(1) > group_means.item(0)
 avg_male_vs_female
 
 
-# In[38]:
+# In[31]:
 
 
 grader.check("q3_2")
@@ -566,14 +566,14 @@ grader.check("q3_2")
 #  - 2
 # -->
 
-# In[39]:
+# In[32]:
 
 
 null_statement_number = 2
 alternative_statement_number = 5
 
 
-# In[40]:
+# In[33]:
 
 
 grader.check("q3_3")
@@ -595,14 +595,14 @@ grader.check("q3_3")
 #  - 4
 # -->
 
-# In[41]:
+# In[34]:
 
 
 permutation_test_reason = 2
 permutation_test_reason
 
 
-# In[42]:
+# In[35]:
 
 
 grader.check("q3_4")
@@ -625,14 +625,14 @@ grader.check("q3_4")
 #  - 4
 # -->
 
-# In[43]:
+# In[36]:
 
 
 correct_test_stat = 1
 correct_test_stat
 
 
-# In[44]:
+# In[37]:
 
 
 grader.check("q3_5")
@@ -650,14 +650,14 @@ grader.check("q3_5")
 #  - 4
 # -->
 
-# In[78]:
+# In[38]:
 
 
 observed_statistic_ab = group_means.item(1) - group_means.item(0)
 observed_statistic_ab
 
 
-# In[79]:
+# In[39]:
 
 
 grader.check("q3_6")
@@ -679,7 +679,7 @@ grader.check("q3_6")
 #  - 1
 # -->
 
-# In[91]:
+# In[40]:
 
 
 shuffled_labels = sampled_ages.select("Gender").sample(with_replacement=False).column(0)
@@ -687,7 +687,7 @@ original_with_shuffled_labels = sampled_ages.with_column("Shuffled Label", shuff
 original_with_shuffled_labels
 
 
-# In[92]:
+# In[41]:
 
 
 grader.check("q3_7")
@@ -713,14 +713,14 @@ grader.check("q3_7")
 #  - 4
 # -->
 
-# In[93]:
+# In[42]:
 
 
 correct_q8 = 1
 correct_q8
 
 
-# In[94]:
+# In[43]:
 
 
 grader.check("q3_8")
@@ -736,19 +736,19 @@ grader.check("q3_8")
 #  - 4
 # -->
 
-# In[95]:
+# In[44]:
 
 
 def simulate_one_statistic():
     "Returns one value of our simulated test statistic"
-    shuffles = sampled_ages.select("Gender").sample(with_replacement=False)
-    with_shuffles = sampled_ages.with_column("Shuffled", shuffles).drop(0)
-    grouped_shuffle_avgs = with_shuffles.group(1, np.average).sort(0).column(1)
-    statistic = grouped_shuffle_avgs.item(1) - grouped_shuffle_avgs.item(0)
+    shuffles = sampled_ages.select("Gender").sample(with_replacement=False).column(0)
+    with_shuffles = sampled_ages.select("Age").with_columns("Shuffled", shuffles)
+    grouped_shuffle_avgs = with_shuffles.group("Shuffled", np.average).column(1)
+    statistic = grouped_shuffle_avgs.item(0) - grouped_shuffle_avgs.item(1)
     return statistic
 
 
-# In[96]:
+# In[45]:
 
 
 grader.check("q3_9")
@@ -756,7 +756,7 @@ grader.check("q3_9")
 
 # After you have defined your function, run the following cell a few times to see how the statistic varies.
 
-# In[85]:
+# In[46]:
 
 
 simulate_one_statistic()
@@ -774,7 +774,7 @@ simulate_one_statistic()
 #  - 4
 # -->
 
-# In[86]:
+# In[47]:
 
 
 repetitions = 4000
@@ -788,7 +788,7 @@ Table().with_columns('Simulated Statistic', simulated_statistics_ab).hist()
 plt.scatter(observed_statistic_ab, -0.002, color='red', s=70);
 
 
-# In[87]:
+# In[ ]:
 
 
 grader.check("q3_10")
@@ -810,20 +810,20 @@ grader.check("q3_10")
 #  - 2
 # -->
 
-# In[88]:
+# In[48]:
 
 
 # These are variables provided for you to use.
 null_hyp = 'The data are consistent with the null hypothesis.'
 alt_hyp = 'The data support the alternative more than the null.'
 
-p_val = np.count_nonzero(observed_statistic_ab <= simulated_statistics_ab)/repetitions
+p_val = np.count_nonzero(simulated_statistics_ab >= observed_statistic_ab)/repetitions
 conclusion = null_hyp
 
 p_val, conclusion # Do not change this line
 
 
-# In[89]:
+# In[49]:
 
 
 grader.check("q3_11")
